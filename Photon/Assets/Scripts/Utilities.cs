@@ -40,4 +40,15 @@ public class Utils
         float sigma = (maxValue - mean) / 3.0f;
         return Mathf.Clamp(std * sigma + mean, minValue, maxValue);
     }
+
+    public float angleBetweenVectors(Vector3 v1, Vector3 v2)
+    {
+        float dotproduct = Vector3.Dot(v1,v2);
+
+        // dotproduct doesn't tell us to rotate clockwise or anticlockwise
+        Vector3 crossproduct = Vector3.Cross(v1,v2);
+        float polarity = crossproduct.z/Mathf.Abs(crossproduct.z);
+
+        return Mathf.Acos(dotproduct/(v1.magnitude * v2.magnitude)) * polarity * -1;
+    }
 }

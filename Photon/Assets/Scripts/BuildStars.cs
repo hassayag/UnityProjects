@@ -10,6 +10,7 @@ public class BuildStars : MonoBehaviour
 
     private GameObject photon;
     private Photon photonClass;
+    public GameObject Asteroid;
 
     private Vector2 currentChunk, lastChunk; 
 
@@ -20,6 +21,9 @@ public class BuildStars : MonoBehaviour
     public float distOffset=0f;
     private int chunkSize;
     public float updateDelay = 0.1f;
+    [Range(0,1)]
+    public float asteroidDensity;
+    public float minAsteroidSize, maxAsteroidSize;
     private List<Vector2> renderedChunks;
 
 
@@ -77,6 +81,32 @@ public class BuildStars : MonoBehaviour
             GameObject star = createStar(chunk);
             star.transform.SetParent(chunkObj.transform);
         }
+        // Create asteroids
+        
+        float numAsteroids = chunkSize * chunkSize * asteroidDensity/100;
+        for (int i=0; i<numAsteroids; i++)
+        {
+            // Random (x,y) pos within chunk
+            float xpos = Random.Range((chunk.x) * chunkSize, (chunk.x + 1) * chunkSize);
+            float ypos = Random.Range((chunk.y) * chunkSize, (chunk.y + 1)* chunkSize);
+
+            // Set asteroid into foreground or background
+            // int coinflip = (int) Mathf.Round(Random.Range(0,1));
+            float zpos = 0;
+            // if (coinflip == 1)
+            // {
+            //     zpos = 1;
+            // }
+
+            float size = Random.Range(minAsteroidSize, maxAsteroidSize);
+
+            // Create new asteroid with a random size
+            GameObject newAsteroid = Instantiate(Asteroid, new Vector3(xpos, ypos, zpos), new Quaternion(0,0,Random.Range(0,360),1));
+            newAsteroid.GetComponent<WanderingBody>().Init(size, Vector3.zero, true, false);
+            newAsteroid.transform.SetParent(chunkObj.transform);
+        }
+
+        // Group all chunks
         chunkObj.transform.SetParent(transform);
     }
 
