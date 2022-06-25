@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 5
-  maxSpeed: 10
+  maxSpeed: 30
   maxSpin: 200
   childSpacing: 4
   childSpeed: 0.5

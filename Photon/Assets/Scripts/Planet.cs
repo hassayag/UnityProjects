@@ -12,7 +12,7 @@ public class Planet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pullableObjects = GameObject.FindGameObjectsWithTag("HasMass");
+        pullableObjects = GameObject.FindGameObjectsWithTag("Player");
     }
 
     // Update is called once per frame
@@ -29,7 +29,7 @@ public class Planet : MonoBehaviour
         Vector3 direction = transform.position - item.transform.position;
         direction.z = 0;
         
-        Rigidbody rigidBody = item.GetComponent<Rigidbody>();
+        Rigidbody2D rigidBody = item.GetComponent<Rigidbody2D>();
         
         // F = GMm/r^2
         rigidBody.AddForce(direction.normalized * G * M / Mathf.Pow(direction.magnitude, 2));

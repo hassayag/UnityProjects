@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 2009041984}
   - component: {fileID: 2009041983}
   - component: {fileID: 2009041986}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ MonoBehaviour:
   volumeTrigger: {fileID: 2009041985}
   volumeLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 0
   antialiasingMode: 0
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 1992707870}
   - component: {fileID: 1992707875}
   - component: {fileID: 1992707881}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Photon
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -305,7 +305,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.74, y: 0.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 326671503}
   - {fileID: 130528822}
@@ -352,9 +352,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7924528, g: 0.7135745, b: 0.02616591, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -384,7 +384,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &7272732519919058030
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -415,15 +415,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 0
   currentChunk: {x: 0, y: 0, z: 0}
-  chunkSize: 300
+  chunkSize: 400
   speed: 3
   trailWidth: 30
-  angSpeed: 5
+  angSpeed: 3.5
   speedLimit: 1000
   mouseThresh: 10
   turnThresh: 1
-  maxCamDist: -30
-  minCamDist: 3
+  maxCamDist: -35
+  minCamDist: -15
 --- !u!114 &1774588440299240021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,7 +554,7 @@ TrailRenderer:
     generateLightingData: 1
   m_MinVertexDistance: 0.01
   m_Autodestruct: 0
-  m_Emitting: 0
+  m_Emitting: 1
 --- !u!114 &1992707875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,9 +581,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 1, g: 0.89922845, b: 0, a: 0.15686275}
-  glowBrightness: 2.21
+  glowColor: {r: 1, g: 0.89922845, b: 0, a: 0.34117648}
+  glowBrightness: 2.41
   outlineWidth: 2
-  alphaThreshold: 0.015
-  drawOutside: 1
+  alphaThreshold: 1
+  drawOutside: 0
   enableInstancing: 0

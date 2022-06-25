@@ -10,7 +10,7 @@ public class Photon : LivingEntity
 
     public Vector3 currentChunk;
     public int chunkSize = 1000;
-    public float speed = 1;
+    public float flySpeed, walkSpeed;
     public float trailWidth = 5.0f;
     public float angSpeed = 100.0f;
     public float speedLimit = 100.0f;
@@ -19,14 +19,18 @@ public class Photon : LivingEntity
     public float maxCamDist, minCamDist;
 
     private Rigidbody2D myRigidBody;
-    private GameObject currentAim, camera;
+    private GameObject currentAim, camera, sprite;
     private TrailRenderer trail;
     private GunController gunController;
     private Transform gun;
+    private SpriteRenderer spriteRenderer;
+
+
+    bool isFlying = true;
 
     //Coroutine Vars
     private Vector3 v_start, v_end;
-    private float theta;
+    private float theta, theta0;
 
 
     // Start is called before the first frame update
@@ -39,19 +43,44 @@ public class Photon : LivingEntity
         // Get Gun
         gunController = GetComponent<GunController>();
         gun = transform.Find("Gun");
+
         // Get Camera
         camera = gameObject.transform.GetChild(0).gameObject;
+
+        // Get Sprite
+        sprite = gameObject.transform.GetChild(1).gameObject;
+        spriteRenderer = sprite.GetComponent<SpriteRenderer>();
+
+        // Init Velocity
+        myRigidBody.velocity = new Vector3 (0.3f,0,0);
+        myRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Store current chunk for use in BuildStars
         currentChunk = new Vector3 (Mathf.Floor(transform.position.x/chunkSize), Mathf.Floor(transform.position.y/chunkSize));
+
+        // Flip sprite if negative angle
+        FlipSprite();
+
+        // Set camera distance based on velocity
         StartCoroutine(SetCameraDistance());
-        Action();
+
+        // Check flying inputs
+        if (isFlying)
+        {
+            FlyAction();
+        }
+        else
+        {
+            ButtDown();
+            GroundAction();
+        }
     }
 
-    void Action()
+    void FlyAction()
     {
         // Change speed
         float verticalMove = Input.GetAxisRaw("Vertical");
@@ -70,8 +99,89 @@ public class Photon : LivingEntity
             gunController.Shoot(myRigidBody.velocity);
         }
 
+        // Switch to walk
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isFlying = false;
+            myRigidBody.constraints = RigidbodyConstraints2D.None;
+        }
+
         // Set trail proportional to the speed
-        trail.widthMultiplier = utils.Remap(myRigidBody.velocity.magnitude, 0, 1000, 0, trailWidth);
+        // trail.widthMultiplier = utils.Remap(myRigidBody.velocity.magnitude, 0, 1000, 0, trailWidth);
+    }
+
+    void GroundAction()
+    {
+        float leftRight = Input.GetAxisRaw("Horizontal");
+
+        if (Mathf.Abs(leftRight) != 0)
+        {
+            Walk(leftRight/Mathf.Abs(leftRight));
+        }
+
+        // Switch to fly
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isFlying = true;
+            myRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+    }
+
+    // dir = +/- 1
+    void Walk(float dir)
+    {
+        transform.Translate(new Vector3(dir*walkSpeed*Time.deltaTime, 0, 0));
+    }
+
+    void ButtDown()
+    {
+        // Search for nearest planet
+        GameObject planet = FindClosestPlanet();    
+        Vector3 toCentre = transform.position - planet.transform.position;    
+        
+        // Rotate it 90 deg
+        Vector3 forward = Quaternion.AngleAxis(90, transform.forward) * planet.transform.position;
+        Debug.DrawLine(transform.position, forward);
+        Debug.DrawLine(transform.position, planet.transform.position);
+        // Rotate body smoothly
+        Turn(forward - transform.position);
+    }
+
+    GameObject FindClosestPlanet()
+    {
+        GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
+
+        float distMin = -1;
+        int distMin_ind = -1;
+        
+        for (int planet_ind = 0; planet_ind < planets.Length; planet_ind ++)
+        {
+            Vector3 planetVect = planets[planet_ind].transform.position - transform.position;
+            float dist = planetVect.magnitude;
+
+            // Store closest planet
+            if (dist < distMin || distMin == -1)
+            {
+                distMin = dist;
+                distMin_ind = planet_ind;
+            }
+        }
+
+        return planets[distMin_ind];
+    }
+    
+    void FlipSprite()
+    {
+        float dogAngle = sprite.transform.localEulerAngles.z - 90;
+
+        if (dogAngle < 180 && dogAngle > 0)
+        {
+            spriteRenderer.flipY = true;
+        }
+        else
+        {
+            spriteRenderer.flipY = false;
+        }
     }
 
     IEnumerator SetCameraDistance()
@@ -123,6 +233,7 @@ public class Photon : LivingEntity
         
         // angle between start and end vector
         theta = angleBetweenVectors(v_start, v_end) * Mathf.Rad2Deg;
+        theta0 = angleBetweenVectors(Vector3.up, v_start) * Mathf.Rad2Deg;
 
         // validate angle
         if (utils.isNan(theta) || Mathf.Round(theta) == 0)
@@ -137,18 +248,21 @@ public class Photon : LivingEntity
         }
 
         StartCoroutine(SmoothTurn());
+        StopCoroutine(SmoothTurn());
     }
 
     IEnumerator SmoothTurn()
     {   
-        int numIncrements = (int) Mathf.Abs(Mathf.Ceil(theta / (angSpeed/100)));
+        // Set min increments to 100
+        int numIncrements = (int) Mathf.Max(Mathf.Abs(Mathf.Ceil(Mathf.Pow(theta,2f) / (angSpeed/100))), 100);
         float delay = Time.deltaTime;
         float lerpDuration = delay * numIncrements;
         float timeElapsed = 0;
+        float deltaTheta = 0;
 
-        while (timeElapsed < lerpDuration)
+        while (timeElapsed < lerpDuration && Mathf.Abs(theta - deltaTheta) > 0.5f)
         {   
-            float deltaTheta = Mathf.Lerp(0, theta, timeElapsed/lerpDuration);
+            deltaTheta = Mathf.Lerp(0, theta, timeElapsed/lerpDuration);
             if (utils.isNan(deltaTheta))
             {
                 break;
@@ -156,6 +270,9 @@ public class Photon : LivingEntity
             // Rotate velocity vector about z-axis
             Vector3 v_next = Quaternion.AngleAxis(deltaTheta, -1 * Vector3.forward) * v_start;
             myRigidBody.velocity = v_start.magnitude * v_next.normalized;
+            
+            // Angle sprites head towards mouse
+            sprite.transform.rotation = Quaternion.Euler(0, 0, -(theta0+deltaTheta-90));
 
             timeElapsed += delay;        
             yield return null;
@@ -170,6 +287,7 @@ public class Photon : LivingEntity
         }
     }
 
+    // direction = +/- 1 to indicate thrust direction
     void Accelerate(float direction)
     {
         Vector3 vel = myRigidBody.velocity;
@@ -188,7 +306,7 @@ public class Photon : LivingEntity
             vel = Vector3.up;
         }
 
-        myRigidBody.AddForce(speed * direction * vel);
+        myRigidBody.AddForce(flySpeed * direction * vel.normalized);
     }
 
     public float angleBetweenVectors(Vector3 v1, Vector3 v2)
