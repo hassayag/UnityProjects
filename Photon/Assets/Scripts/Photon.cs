@@ -32,6 +32,7 @@ public class Photon : LivingEntity
     private Vector3 v_start, v_end;
     private float theta, theta0;
 
+    private Quaternion eulerAng, eulerAng0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,22 +63,25 @@ public class Photon : LivingEntity
         // Store current chunk for use in BuildStars
         currentChunk = new Vector3 (Mathf.Floor(transform.position.x/chunkSize), Mathf.Floor(transform.position.y/chunkSize));
 
-        // Flip sprite if negative angle
-        FlipSprite();
-
-        // Set camera distance based on velocity
-        StartCoroutine(SetCameraDistance());
-
         // Check flying inputs
         if (isFlying)
         {
             FlyAction();
+            
+            // Flip sprite if negative angle
+            FlipSprite();
         }
         else
         {
             ButtDown();
             GroundAction();
         }
+    }
+
+    void LateUpdate()
+    {
+        // Set camera distance based on velocity
+        StartCoroutine(SetCameraDistance());
     }
 
     void FlyAction()
@@ -103,7 +107,7 @@ public class Photon : LivingEntity
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isFlying = false;
-            myRigidBody.constraints = RigidbodyConstraints2D.None;
+            // myRigidBody.constraints = RigidbodyConstraints2D.None;
         }
 
         // Set trail proportional to the speed
@@ -123,7 +127,7 @@ public class Photon : LivingEntity
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isFlying = true;
-            myRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+            // myRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 
@@ -137,14 +141,11 @@ public class Photon : LivingEntity
     {
         // Search for nearest planet
         GameObject planet = FindClosestPlanet();    
-        Vector3 toCentre = transform.position - planet.transform.position;    
+        Vector3 toCentre = planet.transform.position - transform.position;    
         
-        // Rotate it 90 deg
-        Vector3 forward = Quaternion.AngleAxis(90, transform.forward) * planet.transform.position;
-        Debug.DrawLine(transform.position, forward);
-        Debug.DrawLine(transform.position, planet.transform.position);
-        // Rotate body smoothly
-        Turn(forward - transform.position);
+        // transform.rotation = Quaternion.Euler(0,0,Mathf.Atan2(toCentre.y, toCentre.x) * Mathf.Rad2Deg + 90);
+        Debug.Log(Mathf.Atan2(toCentre.y, toCentre.x) * Mathf.Rad2Deg);
+        // StartCoroutine(SmoothRotate());
     }
 
     GameObject FindClosestPlanet()
@@ -170,6 +171,24 @@ public class Photon : LivingEntity
         return planets[distMin_ind];
     }
     
+    IEnumerator SmoothRotate()
+    {   
+        // Set min increments to 10
+        int numIncrements = (int) Mathf.Max(Mathf.Abs(Mathf.Ceil(Mathf.Pow(theta,2f) / (angSpeed/100))), 10);
+        float delay = Time.deltaTime;
+        float lerpDuration = delay * numIncrements;
+        float timeElapsed = 0;
+        float deltaTheta = 0;
+
+        while (timeElapsed < lerpDuration)
+        {   
+            transform.rotation = Quaternion.Lerp(eulerAng0, eulerAng0, timeElapsed/lerpDuration);
+
+            timeElapsed += delay;        
+            yield return null;
+        }
+    }
+
     void FlipSprite()
     {
         float dogAngle = sprite.transform.localEulerAngles.z - 90;

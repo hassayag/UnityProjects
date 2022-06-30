@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-    public float G=1;
-    public float M=1;
+    private float G = 1f;
+    public float density = 1f;
+
+    private float planetRadius;
 
     GameObject[] pullableObjects;
 
@@ -13,6 +15,8 @@ public class Planet : MonoBehaviour
     void Start()
     {
         pullableObjects = GameObject.FindGameObjectsWithTag("Player");
+
+        planetRadius = transform.localScale.x;
     }
 
     // Update is called once per frame
@@ -32,6 +36,7 @@ public class Planet : MonoBehaviour
         Rigidbody2D rigidBody = item.GetComponent<Rigidbody2D>();
         
         // F = GMm/r^2
-        rigidBody.AddForce(direction.normalized * G * M / Mathf.Pow(direction.magnitude, 2));
+        float m = 1; // This should become a variable based on the object being pulled
+        rigidBody.AddForce(direction.normalized * G * density * Mathf.Pow(planetRadius, 2) * m / Mathf.Pow(direction.magnitude, 2));
     }
 }

@@ -9,7 +9,7 @@ public class BuildStars : MonoBehaviour
     public GameObject Star;
 
     private GameObject photon;
-    private Photon photonClass;
+    private Doggy photonClass;
     public GameObject Asteroid;
 
     private Vector2 currentChunk, lastChunk; 
@@ -31,7 +31,7 @@ public class BuildStars : MonoBehaviour
     {        
         // Get player GameObject and Class
         photon = GameObject.FindGameObjectWithTag("Player");
-        photonClass = photon.GetComponent<Photon>();
+        photonClass = photon.GetComponent<Doggy>();
         currentChunk = photonClass.currentChunk;
         renderedChunks = new List<Vector2>();
         chunkSize = photonClass.chunkSize;
@@ -46,7 +46,7 @@ public class BuildStars : MonoBehaviour
     void Update()
     {
         photon = GameObject.FindGameObjectWithTag("Player");
-        photonClass = photon.GetComponent<Photon>();
+        photonClass = photon.GetComponent<Doggy>();
         currentChunk = photonClass.currentChunk;
         GenerateMap(currentChunk);
     }
@@ -92,7 +92,7 @@ public class BuildStars : MonoBehaviour
 
             // Set asteroid into foreground or background
             // int coinflip = (int) Mathf.Round(Random.Range(0,1));
-            float zpos = 0;
+            float zpos = 5f;
             // if (coinflip == 1)
             // {
             //     zpos = 1;
