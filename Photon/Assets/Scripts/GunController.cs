@@ -27,4 +27,10 @@ public class GunController : MonoBehaviour
 			equippedGun.Shoot(dir);
 		}
 	}
+
+	public void StopShoot() {
+		if (equippedGun != null) {
+			equippedGun.StopShoot();
+		}
+	}
 }
