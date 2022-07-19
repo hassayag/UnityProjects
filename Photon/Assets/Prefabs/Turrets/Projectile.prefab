@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glowColor: {r: 1, g: 0.63991976, b: 0, a: 0.48235294}
-  glowBrightness: 1.64
+  glowColor: {r: 0.8490566, g: 0.8196146, b: 0.020024916, a: 0.48235294}
+  glowBrightness: 4.44
   outlineWidth: 1
   alphaThreshold: 1
   drawOutside: 0
@@ -121,7 +121,6 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 2147483647
-  lifeTime: 2
 --- !u!50 &639873868518713083
 Rigidbody2D:
   serializedVersion: 4

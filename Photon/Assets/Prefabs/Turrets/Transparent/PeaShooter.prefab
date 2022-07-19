@@ -110,7 +110,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.09943386, g: 0.7169812, b: 0.08454966, a: 1}
+  m_Color: {r: 0.09943386, g: 0.7169812, b: 0.08454966, a: 0.1764706}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2575163266962908175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a87d87b34a1cbdc448b0e1e1b419fa0d, type: 3}
   m_Name: 
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2575163266962908175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e065f22c228b3f4eb5fce7a4fb3d0f2, type: 3}
   m_Name: 
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2575163266962908175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd076b9af34b61649a8d69b443bdd227, type: 3}
   m_Name: 
@@ -176,5 +176,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponHold: {fileID: 2575163266092617473}
-  startingGun: {fileID: 1205101255771712618, guid: f90c542220f2cee44a641768fa406da3, type: 3}
+  startingGun: {fileID: 1205101255771712618, guid: 189318711f379874db48018fc9c83962, type: 3}
   equippedGun: {fileID: 0}

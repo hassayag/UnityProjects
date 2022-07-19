@@ -5,7 +5,7 @@ using UnityEngine;
 public class Turret : MonoBehaviour
 {
     public float range = 100f;
-    public float rotationTime = 1f;
+    public float rotationSpeed = 1f;
 
     GameObject[] enemies;
     GameObject target;
@@ -27,25 +27,53 @@ public class Turret : MonoBehaviour
     {
         // Get list of current enemies
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        // TODO: Fix locking onto next enemy
+
         if (target == null)
         {
             target = findClosestEnemy();
         }
         else
         {
-            // Lead shot based on target's velocity
-            Vector3 futureTargetPos = getFuturePos(target);
+            // check if target is dead OR out of range OR out of sight
+            if (targetIsDead() || targetOutOfRange() || !hasLineOfSight(target.transform.position))
+            {
+                target = null;
+            }
+            else
+            {
+                // Lead shot based on target's velocity
+                Vector3 futureTargetPos = getFuturePos(target);
 
-            Vector3 targetDir = futureTargetPos - transform.position;
+                Vector3 targetDir = futureTargetPos - transform.position;
 
-            // Debug.DrawRay(transform.position, targetDir);
+                rotateGun(targetDir);
 
-            rotateGun(targetDir);
-
-            // Shoot gun
-            gunController.Shoot(gun.transform.right);
+                // Shoot gun
+                gunController.Shoot(gun.transform.right);
+            }
         }
+    }
+
+    bool targetIsDead()
+    {
+        if (target.GetComponent<LivingEntity>().getHealth() < 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool targetOutOfRange()
+    {
+        float dist = (target.transform.position - transform.position).magnitude;
+
+        if (dist > range)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     GameObject findClosestEnemy()
@@ -56,7 +84,7 @@ public class Turret : MonoBehaviour
         foreach (GameObject enemy in enemies)
         {
             Vector3 enemyPos = enemy.transform.position;
-            if (!hasLineOfSight(enemyPos, range))
+            if (!hasLineOfSight(enemyPos))
             {
                 continue;
             }
@@ -74,7 +102,7 @@ public class Turret : MonoBehaviour
         return closestEnemy;
     }
 
-    bool hasLineOfSight(Vector3 targetPos, float range)
+    bool hasLineOfSight(Vector3 targetPos)
     {
         Vector3 rayDirection = targetPos - transform.position;
 
@@ -95,20 +123,24 @@ public class Turret : MonoBehaviour
     void rotateGun(Vector3 dir)
     {
         // Rotate gun towards target
+        // gun.transform.rotation *= Quaternion.FromToRotation(gun.transform.right, dir);;
+
         StartCoroutine(smoothRotate(dir));
     }
 
     IEnumerator smoothRotate(Vector3 dir)
     {
+        dir.z = 0;
+
         float timeElapsed = 0;
         var startRotation = gun.transform.rotation;
+        var finalRotation = startRotation * Quaternion.FromToRotation(gun.transform.right, dir);
 
-        dir.z = 0;
-        var finalRotation = Quaternion.FromToRotation(gun.transform.right, dir);
+        float lerpDuration = Mathf.Abs((finalRotation.eulerAngles.z - startRotation.eulerAngles.z)/rotationSpeed);
 
-        while (timeElapsed < rotationTime)
+        while (timeElapsed < lerpDuration)
         {   
-            gun.transform.rotation = Quaternion.Lerp(startRotation, finalRotation, timeElapsed/rotationTime);
+            gun.transform.rotation = Quaternion.Lerp(startRotation, finalRotation, timeElapsed/lerpDuration);
 
             timeElapsed += Time.deltaTime;        
             yield return null;
@@ -124,7 +156,7 @@ public class Turret : MonoBehaviour
         // Adjust position based on length of gun
         Vector3 muzzlePos = transform.position + gun.transform.right;
 
-        float bulletTravelTime = (target.transform.position - muzzlePos).magnitude / (gun.muzzleVelocity + 100f);
+        float bulletTravelTime = (target.transform.position - muzzlePos).magnitude / (gun.muzzleVelocity + 70f);
         
         Vector3 futurePos = target.transform.position + targetVelocity * bulletTravelTime;
 

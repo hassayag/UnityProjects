@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 2575163266962908164}
   - component: {fileID: 2575163266962908167}
   m_Layer: 12
-  m_Name: PeaShooter
+  m_Name: Gatling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.09943386, g: 0.7169812, b: 0.08454966, a: 1}
+  m_Color: {r: 0.39575163, g: 0.07195621, b: 0.7264151, a: 0.78431374}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2575163266962908175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a87d87b34a1cbdc448b0e1e1b419fa0d, type: 3}
   m_Name: 
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2575163266962908175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e065f22c228b3f4eb5fce7a4fb3d0f2, type: 3}
   m_Name: 
@@ -156,13 +156,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2575163266962908175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd076b9af34b61649a8d69b443bdd227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 1000
-  rotationSpeed: 2000
+  range: 500
+  rotationSpeed: 1000
 --- !u!114 &2575163266962908167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,5 +176,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponHold: {fileID: 2575163266092617473}
-  startingGun: {fileID: 1205101255771712618, guid: f90c542220f2cee44a641768fa406da3, type: 3}
+  startingGun: {fileID: 4323353995818587540, guid: 59100d0f1a1f54447b55c6ffa9c600aa, type: 3}
   equippedGun: {fileID: 0}

@@ -1081,7 +1081,7 @@ MonoBehaviour:
         m_MethodName: clickFromUI
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2575163266962908175, guid: 2fa15eed67beba147b796abb17af9a96, type: 3}
+          m_ObjectArgument: {fileID: 472761818940098096, guid: 94731f74f9064f540bf8d0c955c16e5b, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -2039,7 +2039,7 @@ MonoBehaviour:
         m_MethodName: clickFromUI
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2575163266962908175, guid: 681ba22e438d15843b18fdc9a556390b, type: 3}
+          m_ObjectArgument: {fileID: 5556197182181923310, guid: bed298f681e57a3478dc38273d088b3e, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -3886,11 +3886,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2382152530859695450, guid: 1386ec49488fd654fbe42e135742c51c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1099
+      value: -1091.5
       objectReference: {fileID: 0}
     - target: {fileID: 2382152530859695450, guid: 1386ec49488fd654fbe42e135742c51c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 147
+      value: 120.9
       objectReference: {fileID: 0}
     - target: {fileID: 2382152530859695450, guid: 1386ec49488fd654fbe42e135742c51c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4000,4 +4000,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81c9e67670cb87409d032b21f1babe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedComponent: {fileID: 5999292524412381137, guid: 89039f49888a8fe48a8e1830369c5447, type: 3}
+  fixedPosSymbol: {fileID: 133935253988531405, guid: 136738fa3b4ce5a4e8307564ec7f71c8, type: 3}
+  snapThresh: 50
+  playPauseRampTime: 0.5
